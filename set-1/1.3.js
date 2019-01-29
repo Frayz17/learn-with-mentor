@@ -1,17 +1,17 @@
 function range(from, to) {
-  const rangeArr = [];
+  // const rangeArr = [];
 
-  for (let i = from; i < to; i++) {
-    rangeArr.push(i);
-  }
+  // for (let i = from; i < to; i++) {
+  //   rangeArr.push(i);
+  // }
 
-  return rangeArr;
+  return Array(to - from + 1).fill(1);
 }
 
 range(0, 0); // []
 range(0, 1); // [0]
 range(0, 2); // [0, 1]
-range(0, 3); // [0, 1, 2]
+console.log(range(0, 3)); // [0, 1, 2]
 
 range(1, 0); // [] -- edge case, arguments make no sense
 range(1, 1); // []
