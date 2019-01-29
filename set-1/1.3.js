@@ -1,11 +1,9 @@
 function range(from, to) {
-  // const rangeArr = [];
-
-  // for (let i = from; i < to; i++) {
-  //   rangeArr.push(i);
-  // }
-
-  return Array(to - from + 1).fill(1);
+  if (to >= from) {
+    return Array(to - from)
+      .fill()
+      .map((element, index) => index);
+  } else return [];
 }
 
 range(0, 0); // []
