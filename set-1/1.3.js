@@ -1,9 +1,7 @@
 function range(from, to) {
-  if (to >= from) {
-    return Array(to - from)
-      .fill()
-      .map((element, index) => index);
-  } else return [];
+  return from < to
+    ? Array(to - from).fill().map((_, i) => i)
+    : []
 }
 
 range(0, 0); // []
