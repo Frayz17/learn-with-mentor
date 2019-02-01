@@ -1,4 +1,6 @@
 function encrypt(str, offset = 0) {
+  offset = Math.abs(offset);
+
   if (offset !== 0) {
     let arr = str.split("");
     arr = arr.map(k => shiftValueInRangePlus(k, offset));
@@ -6,12 +8,12 @@ function encrypt(str, offset = 0) {
     str = arr.join("");
 
     return str;
-  } else {
-    return str;
-  }
+  } else return str;
 }
 
 function decrypt(str, offset = 0) {
+  offset = Math.abs(offset);
+
   if (offset !== 0) {
     let arr = str.split("");
     arr = arr.map(k => shiftValueInRangeMinus(k, offset));
@@ -19,12 +21,10 @@ function decrypt(str, offset = 0) {
     str = arr.join("");
 
     return str;
-  } else {
-    return str;
-  }
+  } else return str;
 }
 
-console.log(encrypt("abz", 0)); // "dec"
+console.log(encrypt("abz", -1)); // "dec"
 console.log(decrypt("dec", 0)); // "abz"
 console.log(decrypt(encrypt("foobar")) == "foobar"); // true
 
@@ -53,16 +53,3 @@ function shiftValueInRangeMinus(value, offset) {
     return value;
   } else return "value not in range";
 }
-
-// function shiftValueInRange(value, offset) {
-//   value = value.charCodeAt();
-//   const to = 122;
-//   const from = 97;
-
-//   if (value >= from && value <= to) {
-//     let shiftedValue =
-//       value + offset > to ? value + offset - to + from - 1 : value + offset;
-//     shiftedValue = String.fromCharCode(shiftedValue);
-//     return shiftedValue;
-//   } else return "value not in range";
-// }
