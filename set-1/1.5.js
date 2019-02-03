@@ -1,17 +1,18 @@
 const ifElse = (cond, ifTrue, ifFalse) => {
   if (cond) return ifTrue();
   return ifFalse();
-}
+};
 
 let a = 0;
 let b = 0;
 let c = 0;
 let d = 0;
 
-console.log(ifElse(true, () => a = 1, () => b = 2));
+const ifTrue = () => (a = 1);
+const ifFalse = () => (b = 2);
+
+console.log(ifElse(true, ifTrue, ifFalse));
 console.log(a + " " + b);
-
-
 
 // expected a = 1 b = 0
 // result a = 1 b = 2
