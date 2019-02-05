@@ -1,26 +1,26 @@
 function deepMerge(o1, o2) {
-  // let mergeObj = { ...o1 };
-  // const notUsedVal = 1;
+  let mergeObj = { ...o1 };
+  const notUsedVal = 1;
 
-  // const reducer = (_, currentValue) => {
-  //   if (isObject(o2[currentValue])) {
-  //     return (mergeObj[currentValue] = deepMerge(
-  //       o1[currentValue],
-  //       o2[currentValue]
-  //     ));
-  //   } else {
-  //     return (mergeObj = merge(mergeObj, { [currentValue]: o2[currentValue] }));
-  //   }
-  // };
-
-  let obj = { ...o1 };
-
-  let objCopy = Object.keys(obj).reduce((acc, curr) => {
-    {
-      acc[curr] = o2[curr];
+  const reducer = (_, currentValue) => {
+    if (isObject(o2[currentValue])) {
+      return (mergeObj[currentValue] = deepMerge(
+        o1[currentValue],
+        o2[currentValue]
+      ));
+    } else {
+      return (mergeObj = merge(mergeObj, { [currentValue]: o2[currentValue] }));
     }
-    return acc;
-  }, {});
+  };
+
+  // let obj = { ...o1 };
+
+  // let objCopy = Object.keys(obj).reduce((acc, curr) => {
+  //   {
+  //     acc[curr] = o2[curr];
+  //   }
+  //   return acc;
+  // }, {});
 
   // console.log(objCopy);
 

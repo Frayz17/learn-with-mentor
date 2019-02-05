@@ -3,7 +3,7 @@ function encrypt(str, offset = 0) {
 
   if (offset !== 0) {
     let arr = str.split("");
-    arr = arr.map(k => shiftValueInRangePlus(k, offset));
+    arr = arr.map(k => shiftValueInRangeRight(k, offset));
 
     str = arr.join("");
 
@@ -16,7 +16,7 @@ function decrypt(str, offset = 0) {
 
   if (offset !== 0) {
     let arr = str.split("");
-    arr = arr.map(k => shiftValueInRangeMinus(k, offset));
+    arr = arr.map(k => shiftValueInRangeLeft(k, offset));
 
     str = arr.join("");
 
@@ -24,32 +24,32 @@ function decrypt(str, offset = 0) {
   } else return str;
 }
 
-console.log(encrypt("abz", -1)); // "dec"
-console.log(decrypt("dec", 0)); // "abz"
+console.log(encrypt("abz", 3)); // "dec"
+console.log(decrypt("dec", 3)); // "abz"
 console.log(decrypt(encrypt("foobar")) == "foobar"); // true
 
-function shiftValueInRangePlus(value, offset) {
+function shiftValueInRangeRight(value, offset) {
   value = value.charCodeAt();
-  const to = 122;
-  const from = 97;
+  const valueCodeBase = 97;
+  const alphabetLettersAmount = 26;
 
-  if (value >= from && value <= to) {
-    let shiftedValue =
-      value + offset > to ? value + offset - to + from - 1 : value + offset;
-    shiftedValue = String.fromCharCode(shiftedValue);
-    return shiftedValue;
-  } else return "value not in range";
+  let cipherValue =
+    ((value - valueCodeBase + offset) % alphabetLettersAmount) + valueCodeBase;
+
+  cipherValue = String.fromCharCode(cipherValue);
+  return cipherValue;
 }
 
-function shiftValueInRangeMinus(value, offset) {
+function shiftValueInRangeLeft(value, offset) {
   value = value.charCodeAt();
-  const to = 122;
-  const from = 97;
+  const valueCodeBase = 97;
+  const alphabetLettersAmount = 26;
 
-  if (value >= from && value <= to) {
-    value =
-      value - offset < from ? value - offset - from + to + 1 : value - offset;
-    value = String.fromCharCode(value);
-    return value;
-  } else return "value not in range";
+  let cipherValue =
+    ((value - valueCodeBase - offset + alphabetLettersAmount) %
+      alphabetLettersAmount) +
+    valueCodeBase;
+
+  cipherValue = String.fromCharCode(cipherValue);
+  return cipherValue;
 }
