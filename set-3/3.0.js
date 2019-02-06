@@ -4,31 +4,37 @@
 3) Реализовать maximum, minimum на базе max, min, reduce1
 */
 
-// function map1(fn, xs) {
-//   let ys = [];
-//   for (let x of xs) {
-//     ys = [...ys, fn(x)];
-//   }
-//   return ys;
-// }
+let xs = [1, 2, 5, 0, -20, 100, 150, 3];
 
-// function double(x) {
-//   return x * x;
-// }
+console.log(maximum(xs));
+console.log(minimum(xs));
 
-// x = [1, 2, 3];
-// // console.log(map1(double, x));
-
-function add(a, b) {
-  return a + b;
+function maximum(xs) {
+  return reduce1(max, xs);
 }
 
-x = [1, 2, 3];
-console.log(reduce1(add, 0, x));
+function minimum(xs) {
+  return reduce1(min, xs);
+}
 
-function reduceOneArg(fn, xs) {
+function max(x, y) {
+  return x > y ? x : y;
+}
+
+function min(x, y) {
+  return x < y ? x : y;
+}
+
+function reduce1(fn, xs) {
   let z;
-  for (let i = 0; i < xs.length - 1; i++) {
-    z;
+  if (Array.isArray(xs) && xs.length) {
+    [z, ..._xs] = xs;
+    for (x of _xs) {
+      z = fn(z, x);
+    }
+  } else {
+    z = "array must have at least one element";
   }
+
+  return z;
 }

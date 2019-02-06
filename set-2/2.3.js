@@ -1,7 +1,7 @@
 function double(xs) {
   let arr = [];
   arr = xs.reduce((acc, curr) => {
-    return acc.concat([curr, curr]);
+    return [...acc, curr, curr];
   }, []);
   return arr;
 }
