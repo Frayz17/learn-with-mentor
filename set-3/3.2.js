@@ -29,22 +29,24 @@ const codonProteinTable = {
   UGA: "STOP"
 };
 
-let rna = "AUGUUUUCUUAAAUG";
+let rna = "UGUUCGUCUUUUAUGUGAUAGUGC";
 
-function rnaToCodons(rna) {
+
+function rnaToProteins(rna) {
+  // codons array create
   const regex = /.{3}/g;
-  const codonsArr = rna.match(regex);
-  return codonsArr;
+  let codonsArr = rna.match(regex);
+
+  // codons array clean
+  index = codonsArr.findIndex(codon => 
+    (codon === 'UAA') || (codon === 'UAG') || (codon ==='UGA'));
+  codonsArr = codonsArr.slice(0, index);
+
+  // map codons to proteins
+  let proteins = [];
+  proteins = codonsArr.map(codons => codonProteinTable[codons]);
+
+  return proteins;
 }
 
-function codonsToProteine(codons) {
-  let _codons = [];
-  _codons = codons.map(codons => codonProteinTable[codons]);
-  return _codons;
-}
-
-const codons = rnaToCodons(rna);
-console.log(rnaToCodons(rna));
-console.log(codonsToProteine(codons));
-
-function rnaToProteins() {}
+console.log(rnaToProteins(rna));
