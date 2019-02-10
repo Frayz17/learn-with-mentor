@@ -1,11 +1,38 @@
-let str =
-  "NkvsxkbUryvsxKvodrskbwsocgyxkpvoodsxqfsmdybikdkdobbslvomycd^rooxowiZkbcroxnscewwyxondrofsyvoxdOfobcdybwgrsmrxygcgoozcdrogybvngsdrnocdbemdsyxkxnsxsdczkccsxqkgkuoxcdroyxmozokmopevkxncelcobfsoxdzkbcrwoxdydrorybbybypdrosbwsvvoxxskvyxqoxcvkfowoxdlirewkxcarsvoyxknoczobkdopvsqrddygkbxrscpkwsviypdrodrbokdUkvknsx]dybwlvocconwecdmywodyqbszcgsdrdropkmddrkddroxogviusxnvonkxqobypdrozkbcrwoxwkilogryvvitecdspson";
-str = str.toLowerCase();
+"use strict";
+
+// libraries
+let reduce1ArgLib = require("./libs/reduce1Arg.js");
+let ceaserCipherLib = require("./libs/ceaserCipher.js");
+
+// example strings
+let str1 =
+  "qeb zxjmxfdk yolrdeq elklrop xka moljlqflk ql jxkv, yrq clo jb fq exa klqefkd yrq jfpcloqrkb xka afpxpqbo. f txp objlsba colj jv yofdxab xka xqqxzeba ql qeb ybohpefobp, tfqe telj f pbosba xq qeb cxqxi yxqqib lc jxftxka. qebob f txp pqorzh lk qeb pelriabo yv x gbwxfi yriibq, tefze pexqqboba qeb ylkb xka doxwba qeb pryzixsfxk xoqbov. f pelria exsb cxiibk fkql qeb exkap lc qeb jroabolrp dexwfp exa fq klq ybbk clo qeb abslqflk xka zlroxdb peltk yv jrooxv, jv loaboiv, tel qeobt jb xzolpp x mxzhelopb, xka przzbbaba fk yofkdfkd jb pxcbiv ql qeb yofqfpe ifkbp.";
+let str2 =
+  "qilh qcnb juch, uhx qyue zlig nby jlifihayx bulxmbcjm qbcwb c bux ohxylaihy, c qum lygipyx, qcnb u alyun nluch iz qiohxyx mozzylylm, ni nby vumy bimjcnuf un jymbuqul. byly c luffcyx, uhx bux uflyuxs cgjlipyx mi zul um ni vy uvfy ni qufe uvion nby qulxm, uhx ypyh ni vume u fcnnfy ojih nby pyluhxu, qbyh c qum mnlowe xiqh vs yhnylcw zypyl, nbun wolmy iz iol chxcuh jimmymmcihm. zil gihnbm gs fczy qum xymjuclyx iz, uhx qbyh un fumn c wugy ni gsmyfz uhx vywugy wihpufymwyhn, c qum mi qyue uhx yguwcunyx nbun u gyxcwuf viulx xynylgchyx nbun hin u xus mbiofx vy fimn ch myhxcha gy vuwe ni yhafuhx. c qum xymjunwbyx, uwwilxchafs, ch nby nliijmbcj ilihnym, uhx fuhxyx u gihnb funyl ih jilnmgionb dynns, qcnb gs byufnb cllynlcypuvfs lochyx, von qcnb jylgcmmcih zlig u junylhuf aipylhgyhn ni mjyhx nby hyrn hchy gihnbm ch unnygjncha ni cgjlipy cn.";
+
+// decoded strings
+str1 = ceaserCipherDecoder(str1); // the campaign brought honours...
+str2 = ceaserCipherDecoder(str2); // worn with pain, and weak from the prolonged...
+
+console.log(str2);
+
+// ---------------------------------------------------------
+// ---------------------------------------------------------
+function ceaserCipherDecoder(str) {
+  // creating table of all letters in the string
+  let lettersTable = letterAnalyzer(str);
+  // take the most frequent letter from table
+  let MostFreqLetter = MostFreqLetterFromString(lettersTable);
+  // using decoder to return decoded string
+  let decodedStr = decoder(MostFreqLetter, str);
+
+  return decodedStr;
+}
 
 function letterAnalyzer(str) {
-  letersTable = {};
+  let letersTable = {};
 
-  for (i = 97; i <= 122; i++) {
+  for (let i = 97; i <= 122; i++) {
     let letter = String.fromCharCode(i);
     var regexLetter = new RegExp(letter, "g");
 
@@ -18,19 +45,12 @@ function letterAnalyzer(str) {
   return letersTable;
 }
 
-let lettersTable = letterAnalyzer(str);
-
 function MostFreqLetterFromString(lettersTable) {
   const keys = Object.keys(lettersTable);
   const values = Object.values(lettersTable);
   if (!keys.length) throw Error("object can't be empty");
-  // let max = keys[0];
 
-  // let maxValue = keys.slice(1).reduce((m, k) => {
-  //   return m > obj[k] ? m : obj[k];
-  // }, max);
-
-  let maxValue = reduce1(max, values);
+  let maxValue = reduce1ArgLib.reduce(reduce1ArgLib.max, values);
 
   let MostFrecLetter = {};
   for (let key of keys) {
@@ -42,7 +62,6 @@ function MostFreqLetterFromString(lettersTable) {
   return MostFrecLetter;
 }
 
-// char
 function decoder(objLetter, str) {
   const eCode = 101;
   let keys = Object.keys(objLetter);
@@ -51,81 +70,7 @@ function decoder(objLetter, str) {
 
   str =
     charCodes[0] > eCode
-      ? decryptLeft(str, encryptKey)
-      : encryptRight(str, encryptKey);
+      ? ceaserCipherLib.decryptLeft(str, encryptKey)
+      : ceaserCipherLib.encryptRight(str, encryptKey);
   return str;
-}
-
-let MostFrecLetter = MostFreqLetterFromString(lettersTable);
-console.log(decoder(MostFrecLetter, str));
-console.log(MostFreqLetterFromString(lettersTable));
-
-function max(x, y) {
-  return x > y ? x : y;
-}
-
-function reduce1(fn, xs) {
-  let z;
-  if (Array.isArray(xs) && xs.length) {
-    [z, ..._xs] = xs;
-    for (x of _xs) {
-      z = fn(z, x);
-    }
-  } else {
-    throw Error("array can't be empty");
-  }
-
-  return z;
-}
-
-function encryptRight(str, offset = 0) {
-  offset = Math.abs(offset);
-
-  if (offset !== 0) {
-    let arr = str.split("");
-    arr = arr.map(k => shiftValueInRangeRight(k, offset));
-
-    str = arr.join("");
-
-    return str;
-  } else return str;
-}
-
-function decryptLeft(str, offset = 0) {
-  offset = Math.abs(offset);
-
-  if (offset !== 0) {
-    let arr = str.split("");
-    arr = arr.map(k => shiftValueInRangeLeft(k, offset));
-
-    str = arr.join("");
-
-    return str;
-  } else return str;
-}
-
-function shiftValueInRangeRight(value, offset) {
-  value = value.charCodeAt();
-  const valueCodeBase = 97;
-  const alphabetLettersAmount = 26;
-
-  let cipherValue =
-    ((value - valueCodeBase + offset) % alphabetLettersAmount) + valueCodeBase;
-
-  cipherValue = String.fromCharCode(cipherValue);
-  return cipherValue;
-}
-
-function shiftValueInRangeLeft(value, offset) {
-  value = value.charCodeAt();
-  const valueCodeBase = 97;
-  const alphabetLettersAmount = 26;
-
-  let cipherValue =
-    ((value - valueCodeBase - offset + alphabetLettersAmount) %
-      alphabetLettersAmount) +
-    valueCodeBase;
-
-  cipherValue = String.fromCharCode(cipherValue);
-  return cipherValue;
 }
