@@ -9,8 +9,9 @@
 // 'A' for adenine, 'C' for cytosine, 'G' for guanine, and 'T' thymine.
 
 // Here is an analogy: nucleotides are to DNA as legos are to lego houses.
+"use strict";
 
-const dna = 'AACGTATTGTCCGA';
+const dna = "AACGTATTGTCCGA";
 
 console.log(countNucleotides(dna));
 
@@ -20,15 +21,15 @@ function countNucleotides(dna) {
   const regexG = /G/g;
   const regexT = /T/g;
 
-  amountNucleotidesA = dna.match(regexA).length;
-  amountNucleotidesC = dna.match(regexC).length;
-  amountNucleotidesG = dna.match(regexG).length;
-  amountNucleotidesT = dna.match(regexT).length;
+  const amountNucleotidesA = dna.match(regexA).length;
+  const amountNucleotidesC = dna.match(regexC).length;
+  const amountNucleotidesG = dna.match(regexG).length;
+  const amountNucleotidesT = dna.match(regexT).length;
 
   return {
     A: amountNucleotidesA,
     C: amountNucleotidesC,
     G: amountNucleotidesG,
-    T: amountNucleotidesT,
-  }
+    T: amountNucleotidesT
+  };
 }

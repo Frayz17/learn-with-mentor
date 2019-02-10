@@ -8,6 +8,7 @@
 // UGU, UGC           | Cysteine
 // UGG                | Tryptophan
 // UAA, UAG, UGA      | STOP
+"use strict";
 
 const codonProteinTable = {
   AUG: "Methionine",
@@ -30,7 +31,7 @@ const codonProteinTable = {
 };
 
 let rna = "UGUUCGUCUUUUAUGUGAUAGUGC";
-
+console.log(rnaToProteins(rna)); // [ 'Cysteine', 'Serine', 'Serine', 'Phenylalanine', 'Methionine' ]
 
 function rnaToProteins(rna) {
   // codons array create
@@ -38,8 +39,9 @@ function rnaToProteins(rna) {
   let codonsArr = rna.match(regex);
 
   // codons array clean
-  index = codonsArr.findIndex(codon => 
-    (codon === 'UAA') || (codon === 'UAG') || (codon ==='UGA'));
+  let index = codonsArr.findIndex(
+    codon => codon === "UAA" || codon === "UAG" || codon === "UGA"
+  );
   codonsArr = codonsArr.slice(0, index);
 
   // map codons to proteins
@@ -48,5 +50,3 @@ function rnaToProteins(rna) {
 
   return proteins;
 }
-
-console.log(rnaToProteins(rna));

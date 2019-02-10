@@ -11,6 +11,7 @@
 // T -> A
 // A -> U
 // more (biological) information can be found here.
+"use strict";
 
 const rnaComplementList = {
   G: "C",
