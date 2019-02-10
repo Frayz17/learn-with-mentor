@@ -33,7 +33,7 @@ function reduce1(fn, xs) {
       z = fn(z, x);
     }
   } else {
-    z = "array must have at least one element";
+    throw Error("array can't be empty");
   }
 
   return z;
