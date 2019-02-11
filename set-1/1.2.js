@@ -1,42 +1,32 @@
-function deepMerge(o1, o2) {
-  let obj = { ...o1 };
-  let keysO2 = Object.keys(o2);
-  let initAcc = keysO2[0];
+"use strict";
 
-  obj = keysO2.slice(1).reduce((acc, c) => {
-    if (isObject(o2[acc])) {
-      console.log("hekku");
-      return deepMerge(obj[acc], o2[acc]);
-    } else {
-      console.log("hekkghfgju");
-      return merge(obj);
-    }
-  }, initAcc);
+let o1 = { x: { y: "x.y" } };
+let o2 = { x: { z: "x.z" } };
 
-  return obj;
-}
-
-let o1 = { x: { y: "x.y" }, y: 5 };
-let o2 = { x: { z: "x.z" }, y: 6 };
+// let o1 = { x: 1, y: 2, z: 3 };
+// let o2 = { p: 10, t: 20, n: 30 };
 
 let mergedObjexts = deepMerge(o1, o2);
-console.log(deepMerge(o1, o2)); // {x: {y: "x.y", z: "x.z"}}
-// console.log(deepMerge(o2, o1)); // {x: {z: "x.z", y: "x.y"}}
+console.log(mergedObjexts);
 
-function isObject(item) {
-  return typeof item === "object" && item !== null;
+function isPlainObj(o) {
+  return Boolean(
+    o &&
+      o.constructor &&
+      o.constructor.prototype &&
+      o.constructor.prototype.hasOwnProperty("isPrototypeOf")
+  );
 }
 
-function merge(o1, o2) {
-  return Object.assign({}, o1, o2);
+function merge(obj1, obj2) {
+  return Object.assign({}, obj1, obj2);
 }
 
-// function MaxValueFromObj(obj) {
-//   let keys = Object.keys(obj);
-//   if (!keys.length) throw Error("object can't be empty");
-//   let max = keys[0];
-
-//   return keys.slice(1).reduce((m, k) => {
-//     return m > obj[k] ? m : obj[k];
-//   }, max);
-// }
+function deepMerge(obj1, obj2) {
+  return Object.keys(obj2).reduce((z, k) => {
+    let v2 = obj2[k];
+    return isPlainObj(obj1[k]) && isPlainObj(obj1[k])
+      ? merge(obj1, { [k]: deepMerge(obj1[k], obj2[k]) })
+      : merge(obj1, { [k]: v2 });
+  }, obj1);
+}

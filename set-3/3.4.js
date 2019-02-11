@@ -14,8 +14,8 @@
 
 let str = "49142";
 
-console.log(substrings(str).slices(2)); // [ '49', '91', '14', '42' ]
-console.log(substrings(str).slices(3)); // [ '491', '914', '142' ]
+console.log(substrings(str).slices(1)); // [ '49', '91', '14', '42' ]
+// console.log(substrings(str).slices(3)); // [ '491', '914', '142' ]
 
 function substrings(str) {
   let digits = str.split("").map(s => parseInt(s));
