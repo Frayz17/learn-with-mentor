@@ -16,11 +16,6 @@ const dna = "AACGTATTGTCCGA";
 console.log(countNucleotides(dna)); // { A: 4, C: 3, G: 3, T: 4 }
 
 function countNucleotides(dna) {
-  const regexA = /A/g;
-  const regexC = /C/g;
-  const regexG = /G/g;
-  const regexT = /T/g;
-
   let obj = {
     A: 0,
     C: 0,
@@ -29,36 +24,23 @@ function countNucleotides(dna) {
   };
 
   let strArr = dna.split("");
+
   return strArr.reduce((acc, nucleotid) => {
-    console.log(acc, obj[nucleotid]);
-    // if (nucleotid === "A") {
-    //   return acc.A = ;
-    // } else if (nucleotid === "C") {
-    //   return acc.C++;
-    // } else if (nucleotid === "G") {
-    //   return acc.G++;
-    // } else if (nucleotid === "T") {
-    //   return acc.T++;
-    // } else throw Error("letter is incorrect");
+    switch (nucleotid) {
+      case 'A':
+        acc.A = acc.A + 1;
+        break;
+      case 'C':
+        acc.C = acc.C + 1;
+        break;
+      case 'G':
+        acc.G = acc.G + 1;
+        break;
+      case 'T':
+        acc.T = acc.T + 1;
+        break;  
+    }
+
+    return acc;    
   }, obj);
-  // console.log(strArr);
 }
-
-// function countNucleotides(dna) {
-//   const regexA = /A/g;
-//   const regexC = /C/g;
-//   const regexG = /G/g;
-//   const regexT = /T/g;
-
-//   const amountNucleotidesA = dna.match(regexA).length;
-//   const amountNucleotidesC = dna.match(regexC).length;
-//   const amountNucleotidesG = dna.match(regexG).length;
-//   const amountNucleotidesT = dna.match(regexT).length;
-
-//   return {
-//     A: amountNucleotidesA,
-//     C: amountNucleotidesC,
-//     G: amountNucleotidesG,
-//     T: amountNucleotidesT
-//   };
-// }
