@@ -28,8 +28,7 @@ function countNucleotides(dna) {
   return strArr.reduce((acc, nucleotid) => {
     switch (nucleotid) {
       case 'A':
-        acc.A = acc.A + 1;
-        break;
+        return {...acc, A: acc.A + 1} // this one don't mutate obj
       case 'C':
         acc.C = acc.C + 1;
         break;
