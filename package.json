@@ -1,0 +1,22 @@
+{
+  "name": "learn-with-mentor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Frayz17/learn-with-mentor.git"
+  },
+  "author": "Frayz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Frayz17/learn-with-mentor/issues"
+  },
+  "homepage": "https://github.com/Frayz17/learn-with-mentor#readme",
+  "devDependencies": {
+    "standard": "^12.0.1"
+  }
+}
