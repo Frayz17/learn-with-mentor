@@ -1,11 +1,14 @@
 
 class StatefulEmitter {
-  constructor (initialState) {
-    this.state = initialState
+  constructor () {
+    this.state = {
+      timerON: false,
+      counter: 60
+    }
     this.events = {}
   }
 
-  on (eventName, fn) {
+  subscribe (eventName, fn) {
     if (!this.events[eventName]) {
       this.events[eventName] = []
     }
@@ -13,17 +16,31 @@ class StatefulEmitter {
     this.events[eventName].push(fn)
 
     return () => {
-      this.events[eventName] = this.events[eventName].filter(eventFn => fn !== eventFn)
+      this.events[eventName] = this.events[eventName].filter((eventFn) => {
+        return fn !== eventFn
+      })
     }
   }
 
   emit (eventName, data) {
     const handlers = this.events[eventName]
-    if (handlers.length) {
-      for (let handler of handlers) {
-        handler.call(null, data)
-      };
+    if (handlers !== undefined) {
+      console.log('this.events:   ' + this.events[eventName])
+      console.log('handlers:  ' + handlers)
+      if (handlers.length) {
+        for (let handler of handlers) {
+          handler.call(null, data)
+        }
+      }
     }
+  }
+
+  // toggleState () {
+  //   this.setState(this.getState === true ? false : true)
+  // }
+
+  getState () {
+    return this.state
   }
 
   setState (newStateOrFn) {
@@ -45,15 +62,24 @@ let state$ = new StatefulEmitter()
 //  ---------------------------------------------
 // state$.on(state => timerDir.innerHTML = render(state))
 
-// add event listener to btnStart. If it clicks, state btnStart becomes - true
-// if it clicks another time, state btnStart becomes - false
-state$.on('', () => {
-
-})
-
 btnStart.addEventListener('click', () => {
-  state$.emit('')
+  let bool = state$.getState().timerON === true ? false : true
+  state$.setState(bool)
+
+  if (btnStart.innerHTML === 'start') btnStart.innerHTML = 'pause'
+  else btnStart.innerHTML = 'start'
 })
+
+btnStop.addEventListener('click', () => {
+
+})
+
+
+
+
+// btnStart.addEventListener('click', () => {
+//   state$.emit("event:timerON", { timerON: state.timerON == true ? false : true });
+// });
 
 // state$.on("event:timerON", (data) => {
 //   state.timerON = data.timerON;
