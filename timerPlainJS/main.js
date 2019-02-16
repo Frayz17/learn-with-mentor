@@ -89,22 +89,21 @@ class StatefulEmitter {
 // data -----------------------------------------
 const timerDir = document.querySelector('#timer')
 const btnStart = document.querySelector('.btn-start')
-const btnStop = document.querySelector('.btn-stop')
 const btnRestart = document.querySelector('.btn-restart')
 let state$ = new StatefulEmitter()
 //  ---------------------------------------------
 
 btnStart.addEventListener('click', () => {
-  let bool = state$.getState().state === true ? false : true
-  state$.setState(bool)
+  state$.emit('event:timerToggle', state$.getState() === true ? false : true)
 
   if (btnStart.innerHTML === 'start') btnStart.innerHTML = 'pause'
   else btnStart.innerHTML = 'start'
 })
 
-btnStop.addEventListener('click', () => {
+state$.subscribe('event:timerToggle', (data) => {
+  state$.setState(data)
+}) 
 
-})
 
 
 
