@@ -19,25 +19,18 @@ class StatefulEmitter {
   // Но с такой реализацией у меня метод setState перестал работать.
   // Как модифицировать setState, что б он работал с this.state и this.events, в данной реализации ?
 
-
-
   // В методе setState есть вызов метода "this.emit(this.state)"
   // я не могу в полной мере разобраться как он работает в данном контексте, так как в первоначальной
   // реализации, которую ты мне скинул, при срабатывании "btnStart.addEventListener" возвращалась ошибка
   // Uncaught TypeError: Cannot read property 'length' of undefined
 
   // Что бы избежать этой ошибки:
-  // В методе emit() я добавляю if (handlers !== undefined), тогда "btnStart.addEventListener" работает, 
+  // В методе emit() я добавляю if (handlers !== undefined), тогда "btnStart.addEventListener" работает,
   // Мне кажется что это костыль, так как обработчик handler должен вызывать ивенты, в массиве events.
   // но ведь и ивентов там получается никаких нет на данный момент.
 
-
-  
-  constructor () {
-    this.state = {
-      timerON: false,
-      counter: 60
-    }
+  constructor (initialState) {
+    this.state = initialState
     this.events = {}
   }
 
@@ -72,10 +65,6 @@ class StatefulEmitter {
   //   this.setState(this.getState === true ? false : true)
   // }
 
-  getState () {
-    return this.state
-  }
-
   setState (newStateOrFn) {
     if (typeof newStateOrFn === 'function') {
       this.state = newStateOrFn(this.state)
@@ -89,22 +78,49 @@ class StatefulEmitter {
 // data -----------------------------------------
 const timerDir = document.querySelector('#timer')
 const btnStart = document.querySelector('.btn-start')
+const btnStop = document.querySelector('.btn-stop')
+const btnOneMin = document.querySelector('.btn-oneMin')
+const btnTwoMin = document.querySelector('.btn-twoMin')
 const btnRestart = document.querySelector('.btn-restart')
-let state$ = new StatefulEmitter()
+
+let state$ = new StatefulEmitter({
+  running: false, // -- данные передаём в клиентском коде (на этапе тестов он может быть в том же файле
+  counter: 60
+})
 //  ---------------------------------------------
 
 btnStart.addEventListener('click', () => {
-  state$.emit('event:timerToggle', state$.getState() === true ? false : true)
-
-  if (btnStart.innerHTML === 'start') btnStart.innerHTML = 'pause'
-  else btnStart.innerHTML = 'start'
+  state$.setState()
 })
 
-state$.subscribe('event:timerToggle', (data) => {
-  state$.setState(data)
-}) 
+btnStop.addEventListener('click', () => {
+  state$.setState({ running: false })
+})
 
+btnOneMin.addEventListener('click', () => {
+  state$.setState({
+    counter: 60,
+    running: false
+  })
+})
 
+btnTwoMin.addEventListener('click', () => {
+  state$.setState({
+    counter: 120,
+    running: false
+  })
+})
+
+timerDir.innerHTML = state$.counter
+
+// function render (state) {
+
+//   if (state.running) {
+//     //  timer start
+//   } else {
+//     // timer stop
+//   }
+// }
 
 
 
@@ -114,7 +130,12 @@ state$.subscribe('event:timerToggle', (data) => {
 // ------ Ниже черновики кода, можно не смотреть---------------
 // ------------------------------------------------------------
 
+// btnStart.addEventListener('click', () => {
+//   state$.emit('event:timerToggle', state$.getState() === true ? false : true)
 
+//   if (btnStart.innerHTML === 'start') btnStart.innerHTML = 'pause'
+//   else btnStart.innerHTML = 'start'
+// })
 
 // btnStart.addEventListener('click', () => {
 //   state$.emit("event:timerON", { timerON: state.timerON == true ? false : true });
