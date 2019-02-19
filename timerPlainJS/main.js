@@ -5,7 +5,7 @@ class StatefulEmitter {
 
       // constructor (initialState) {
       //   this.state = initialState
-      //   this.events = {}
+      //   this.handlers = {}
       // }
 
   // this.state у меня принимала данные типа булеан и отвечала за состояние:
@@ -17,7 +17,7 @@ class StatefulEmitter {
   // Оно не должно принимать данные типа булеан, а должно быть объектом, 
   // который содержит все свойства состояния: "таймер включен" и "счетчик времени".
   // Но с такой реализацией у меня метод setState перестал работать.
-  // Как модифицировать setState, что б он работал с this.state и this.events, в данной реализации ?
+  // Как модифицировать setState, что б он работал с this.state и this.handlers, в данной реализации ?
 
   // В методе setState есть вызов метода "this.emit(this.state)"
   // я не могу в полной мере разобраться как он работает в данном контексте, так как в первоначальной
@@ -26,32 +26,32 @@ class StatefulEmitter {
 
   // Что бы избежать этой ошибки:
   // В методе emit() я добавляю if (handlers !== undefined), тогда "btnStart.addEventListener" работает,
-  // Мне кажется что это костыль, так как обработчик handler должен вызывать ивенты, в массиве events.
+  // Мне кажется что это костыль, так как обработчик handler должен вызывать ивенты, в массиве handlers.
   // но ведь и ивентов там получается никаких нет на данный момент.
 
   constructor (initialState) {
     this.state = initialState
-    this.events = {}
+    this.handlers = {}
   }
 
   subscribe (eventName, fn) {
-    if (!this.events[eventName]) {
-      this.events[eventName] = []
+    if (!this.handlers[eventName]) {
+      this.handlers[eventName] = []
     }
 
-    this.events[eventName].push(fn)
+    this.handlers[eventName].push(fn)
 
     return () => {
-      this.events[eventName] = this.events[eventName].filter((eventFn) => {
+      this.handlers[eventName] = this.handlers[eventName].filter((eventFn) => {
         return fn !== eventFn
       })
     }
   }
 
   emit (eventName, data) {
-    const handlers = this.events[eventName]
+    const handlers = this.handlers[eventName]
     if (handlers !== undefined) {
-      // console.log('this.events:   ' + this.events)
+      // console.log('this.handlers:   ' + this.handlers)
       // console.log('handlers:  ' + handlers)
       if (handlers.length) {
         for (let handler of handlers) {
@@ -86,7 +86,7 @@ let state$ = new StatefulEmitter({
 //  ---------------------------------------------
 
 btnStart.addEventListener('click', () => {
-  let counter = state$.state.counter;
+  let counter = state$.state.counter
   state$.setState({
     running: true,
     counter: counter
@@ -94,7 +94,7 @@ btnStart.addEventListener('click', () => {
 })
 
 btnStop.addEventListener('click', () => {
-  let counter = state$.state.counter;
+  let counter = state$.state.counter
   state$.setState({
     running: false,
     counter: counter
@@ -115,13 +115,17 @@ btnTwoMin.addEventListener('click', () => {
   })
 })
 
-
-
-state$.subscribe('runningState', state => timerDir.innerHTML = render(state) )
+state$.subscribe('runningState', state => render(state))
 
 function render (state) {
-  return timerDir.innerHTML = state.counter
-  console.log(timerDir)
+  console.log(state)
+  timerDir.innerHTML = state.counter
+  if (state.running) {
+    setInterval(() => {
+      timerDir.innerHTML = state.counter - 1
+    }, 500)
+  }
+  
   // if (state.running) {
   //   //  timer start
   // } else {
