@@ -51,8 +51,8 @@ class StatefulEmitter {
   emit (eventName, data) {
     const handlers = this.events[eventName]
     if (handlers !== undefined) {
-      console.log('this.events:   ' + this.events[eventName])
-      console.log('handlers:  ' + handlers)
+      // console.log('this.events:   ' + this.events)
+      // console.log('handlers:  ' + handlers)
       if (handlers.length) {
         for (let handler of handlers) {
           handler.call(null, data)
@@ -61,22 +61,18 @@ class StatefulEmitter {
     }
   }
 
-  // toggleState () {
-  //   this.setState(this.getState === true ? false : true)
-  // }
-
   setState (newStateOrFn) {
     if (typeof newStateOrFn === 'function') {
       this.state = newStateOrFn(this.state)
     } else {
       this.state = newStateOrFn
     }
-    this.emit(this.state)
+    this.emit('runningState', this.state)
   }
 }
 
 // data -----------------------------------------
-const timerDir = document.querySelector('#timer')
+const timerDir = document.getElementById('timer')
 const btnStart = document.querySelector('.btn-start')
 const btnStop = document.querySelector('.btn-stop')
 const btnOneMin = document.querySelector('.btn-oneMin')
@@ -85,16 +81,24 @@ const btnRestart = document.querySelector('.btn-restart')
 
 let state$ = new StatefulEmitter({
   running: false, // -- данные передаём в клиентском коде (на этапе тестов он может быть в том же файле
-  counter: 60
+  counter: 20
 })
 //  ---------------------------------------------
 
 btnStart.addEventListener('click', () => {
-  state$.setState()
+  let counter = state$.state.counter;
+  state$.setState({
+    running: true,
+    counter: counter
+  })
 })
 
 btnStop.addEventListener('click', () => {
-  state$.setState({ running: false })
+  let counter = state$.state.counter;
+  state$.setState({
+    running: false,
+    counter: counter
+  })
 })
 
 btnOneMin.addEventListener('click', () => {
@@ -111,16 +115,20 @@ btnTwoMin.addEventListener('click', () => {
   })
 })
 
-timerDir.innerHTML = state$.counter
 
-// function render (state) {
 
-//   if (state.running) {
-//     //  timer start
-//   } else {
-//     // timer stop
-//   }
-// }
+state$.subscribe('runningState', state => timerDir.innerHTML = render(state) )
+
+function render (state) {
+  return timerDir.innerHTML = state.counter
+  console.log(timerDir)
+  // if (state.running) {
+  //   //  timer start
+  // } else {
+  //   // timer stop
+  // }
+}
+
 
 
 
