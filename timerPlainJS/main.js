@@ -1,6 +1,5 @@
 
 class StatefulEmitter {
-
   constructor (initialState) {
     this.state = initialState
     this.handlers = {}
@@ -23,8 +22,6 @@ class StatefulEmitter {
   emit (eventName, data) {
     const handlers = this.handlers[eventName]
     if (handlers !== undefined) {
-      // console.log('this.handlers:   ' + this.handlers)
-      // console.log('handlers:  ' + handlers)
       if (handlers.length) {
         for (let handler of handlers) {
           handler.call(null, data)
@@ -48,58 +45,110 @@ const timerDir = document.getElementById('timer')
 const btnStart = document.querySelector('.btn-start')
 const btnStop = document.querySelector('.btn-stop')
 const btnOneMin = document.querySelector('.btn-oneMin')
-const btnTwoMin = document.querySelector('.btn-twoMin')
+const btnThreeMin = document.querySelector('.btn-threeMin')
+const btnFiveMin = document.querySelector('.btn-fiveMin')
 const btnRestart = document.querySelector('.btn-restart')
 
 let state$ = new StatefulEmitter({
   running: false, // -- данные передаём в клиентском коде (на этапе тестов он может быть в том же файле
-  counter: 20
+  counter: 0
 })
 //  ---------------------------------------------
 
+let idTimer;
+
 btnStart.addEventListener('click', () => {
-  let counter = state$.state.counter
-  state$.setState({
-    running: true,
-    counter: counter
+  state$.setState((state) => {
+    return {
+      running: true,
+      counter: state.counter 
+    }
   })
+
+  if (state$.state.counter > 0) {
+    idTimer = timer();
+  }
 })
 
 btnStop.addEventListener('click', () => {
-  let counter = state$.state.counter
-  state$.setState({
-    running: false,
-    counter: counter
+  state$.setState((state) => {
+    return {
+      running: false,
+      counter: state.counter 
+    }
   })
+
+  clearInterval(idTimer)
 })
 
 btnOneMin.addEventListener('click', () => {
-  state$.setState({
-    counter: 60,
-    running: false
+  state$.setState((state) => {
+    return {
+      running: false,
+      counter: 60
+    }
   })
 })
 
-btnTwoMin.addEventListener('click', () => {
-  state$.setState({
-    counter: 120,
-    running: false
+btnThreeMin.addEventListener('click', () => {
+  state$.setState((state) => {
+    return {
+      running: false,
+      counter: 180
+    }
   })
+
+  clearInterval(idTimer)
+})
+
+btnFiveMin.addEventListener('click', () => {
+  state$.setState((state) => {
+    return {
+      running: false,
+      counter: 300
+    }
+  })
+
+  clearInterval(idTimer)
 })
 
 state$.subscribe('runningState', state => render(state))
 
 function render (state) {
-  console.log(state)
-  timerDir.innerHTML = state.counter
-
-  if (state.running && state.counter > 0) {   
-    let timerStart = setInterval(() => {
-      timerDir.innerHTML = state.counter
-      state.counter--
-    }, 1000)
-  } else {
-    clearInterval(timerStart);
+  let minutes = Math.floor(state.counter / 60).toString()
+  let seconds = Math.floor(state.counter % 60).toString()
+  if (seconds == 0) {
+    seconds = seconds + '0';
   }
   
+  let clockView = `${minutes}:${seconds}`
+
+  timerDir.innerHTML = clockView
+  
+  if (state.running === true) {
+    btnStart.disabled = true;
+  } else {
+    btnStart.disabled = false;
+  }
+
+  if (state.counter <= 0) {
+    clearInterval(idTimer)
+  }
+}
+
+function timer () {
+  let timerStart = setInterval(() => {
+    tick(state$)
+  }, 1000)
+
+  return timerStart;
+}
+
+function tick (state$) {
+  state$.setState((state) => {
+    return {
+      counter: state.counter - 1,
+      running: state.running
+    }
+  })
 }

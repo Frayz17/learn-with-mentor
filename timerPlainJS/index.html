@@ -16,6 +16,10 @@
       font-size: 25px;
       margin-bottom: 20px;
     }
+
+    .box {
+      margin-top: 5px;
+    }
   </style>
 
   <title>timer plain js</title>
@@ -23,13 +27,18 @@
 
 <body>
   <div class="timerApp">
-    <div id="timer">60</div>
+    <div id="timer">0:00</div>
 
-    <button class="btn-start">start</button>
-    <button class="btn-stop">stop</button>
-    <button class="btn-oneMin">1 min</button>
-    <button class="btn-twoMin">2 min</button>
-    <button class="btn-restart">restart</button>
+    <div class="control-btns box">
+      <button class="btn-start">start</button>
+      <button class="btn-stop">stop</button>
+      <button class="btn-restart">restart</button>
+    </div>
+    <div class="duration-btns box">
+      <button class="btn-oneMin">1 min</button>
+      <button class="btn-threeMin">3 min</button>
+      <button class="btn-fiveMin">5 min</button>
+    </div>    
   </div>
 
   <div class="" id="time"></div>
