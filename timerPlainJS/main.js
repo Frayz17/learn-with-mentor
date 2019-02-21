@@ -55,18 +55,18 @@ let state$ = new StatefulEmitter({
 })
 //  ---------------------------------------------
 
-let idTimer;
+let idTimer
 
 btnStart.addEventListener('click', () => {
   state$.setState((state) => {
     return {
       running: true,
-      counter: state.counter 
+      counter: state.counter
     }
   })
 
   if (state$.state.counter > 0) {
-    idTimer = timer();
+    idTimer = timer()
   }
 })
 
@@ -74,7 +74,18 @@ btnStop.addEventListener('click', () => {
   state$.setState((state) => {
     return {
       running: false,
-      counter: state.counter 
+      counter: state.counter
+    }
+  })
+
+  clearInterval(idTimer)
+})
+
+btnRestart.addEventListener('click', () => {
+  state$.setState((state) => {
+    return {
+      running: false,
+      counter: 60
     }
   })
 
@@ -88,6 +99,8 @@ btnOneMin.addEventListener('click', () => {
       counter: 60
     }
   })
+
+  clearInterval(idTimer)
 })
 
 btnThreeMin.addEventListener('click', () => {
@@ -117,18 +130,18 @@ state$.subscribe('runningState', state => render(state))
 function render (state) {
   let minutes = Math.floor(state.counter / 60).toString()
   let seconds = Math.floor(state.counter % 60).toString()
-  if (seconds == 0) {
-    seconds = seconds + '0';
+  if (seconds === '0') {
+    seconds = seconds + '0'
   }
-  
+
   let clockView = `${minutes}:${seconds}`
 
   timerDir.innerHTML = clockView
-  
+
   if (state.running === true) {
-    btnStart.disabled = true;
+    btnStart.disabled = true
   } else {
-    btnStart.disabled = false;
+    btnStart.disabled = false
   }
 
   if (state.counter <= 0) {
@@ -141,7 +154,7 @@ function timer () {
     tick(state$)
   }, 1000)
 
-  return timerStart;
+  return timerStart
 }
 
 function tick (state$) {
